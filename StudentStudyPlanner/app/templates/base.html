@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='scripts.js') }}" defer></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <button class="drawer-toggle" onclick="toggleDrawer()">☰</button>
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="School Logo" class="logo">
+            <h1 class="app-name">Student Study Planner</h1>
+            <div class="header-right">
+                <a href="{{ url_for('routes.new_task') }}" class="plus-icon" title="Add New Task">
+                    <img src="{{ url_for('static', filename='images/plus.png') }}" alt="Add New Task">
+                </a>
+                {% if current_user.is_authenticated %}
+                    <img src="{{ url_for('static', filename='images/profile-pic.png') }}" alt="Profile Picture" class="profile-pic">
+                {% endif %}
+            </div>
+        </div>
+        <div id="drawer" class="drawer">
+            <button class="closebtn" onclick="toggleDrawer()">&times;</button>
+            <ul>
+                <li><a href="{{ url_for('routes.home') }}">Home</a></li>
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('routes.new_task') }}">New Task</a></li>
+                    <li><a href="{{ url_for('routes.logout') }}">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('routes.login') }}">Login</a></li>
+                    <li><a href="{{ url_for('routes.register') }}">Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </header>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+    <script>
+        function toggleDrawer() {
+            var drawer = document.getElementById('drawer');
+            drawer.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

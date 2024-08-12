@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>{{ task.title }}</h1>
+    <p>{{ task.description }}</p>
+    <p>Due: {{ task.due_date.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+    <p>Priority: {{ task.priority }}</p>
+    <p>Status: {{ task.status }}</p>
+    <p>Created on: {{ task.creation_date.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+    <p>Last updated: {{ task.last_updated.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+    <a href="{{ url_for('routes.update_task', task_id=task.id) }}" class="btn btn-primary">Update Task</a>
+    <form action="{{ url_for('routes.delete_task', task_id=task.id) }}" method="POST" style="display: inline;">
+        <button type="submit" class="btn btn-danger">Delete Task</button>
+    </form>
+    <a href="{{ url_for('routes.tasks') }}" class="btn btn-secondary">Back to Tasks</a>
+{% endblock %}
